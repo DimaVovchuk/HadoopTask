@@ -1,5 +1,6 @@
 package com.lab.epam.entity;
 
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Writable;
 
 import java.io.DataInput;
@@ -10,44 +11,56 @@ import java.io.IOException;
  * Created by Bohdan-Dmytro_Vovchu on 11/4/2015.
  */
 public class Model implements Writable {
-    private Double averageBytesPerRequest;
-    private Double totalBytes;
+    private DoubleWritable averageBytesPerRequest;
+    private DoubleWritable totalBytes;
 
-    @Override
-    public String toString() {
-        return "    " +
-                "averageBytesPerRequest=" + averageBytesPerRequest +
-                ", totalBytes=" + totalBytes;
+    public Model() {
+        averageBytesPerRequest = new DoubleWritable();
+        totalBytes = new DoubleWritable();
     }
 
-    public Double getTotalBytes() {
-        return totalBytes;
-    }
-
-    public void setTotalBytes(Double totalBytes) {
-        this.totalBytes = totalBytes;
-    }
-
-    public Double getBytesPerRequest() {
-        return averageBytesPerRequest;
-    }
-
-    public void setBytesPerRequest(Double bytesPerRequest) {
-        this.averageBytesPerRequest = bytesPerRequest;
-    }
-
-    public Model(Double totalBytes, Double averageBytesPerRequest) {
+    public Model(DoubleWritable totalBytes, DoubleWritable averageBytesPerRequest) {
         this.totalBytes = totalBytes;
         this.averageBytesPerRequest = averageBytesPerRequest;
     }
 
-    public void write(DataOutput dataOutput) throws IOException {
-        dataOutput.writeChars(String.valueOf(averageBytesPerRequest));
-        dataOutput.writeChars(String.valueOf(totalBytes));
+    @Override
+    public String toString() {
+        return "" +averageBytesPerRequest +
+                ", " + totalBytes;
     }
 
+
+
+    @Override
+    public void write(DataOutput dataOutput) throws IOException {
+        averageBytesPerRequest.write(dataOutput);
+        totalBytes.write(dataOutput);
+    }
+
+    @Override
     public void readFields(DataInput dataInput) throws IOException {
-        averageBytesPerRequest = Double.parseDouble(dataInput.readLine());
-        totalBytes = Double.parseDouble(dataInput.readLine());
+        averageBytesPerRequest.readFields(dataInput);
+        totalBytes.readFields(dataInput);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Model model = (Model) o;
+
+        if (averageBytesPerRequest != null ? !averageBytesPerRequest.equals(model.averageBytesPerRequest) : model.averageBytesPerRequest != null)
+            return false;
+        return !(totalBytes != null ? !totalBytes.equals(model.totalBytes) : model.totalBytes != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = averageBytesPerRequest != null ? averageBytesPerRequest.hashCode() : 0;
+        result = 31 * result + (totalBytes != null ? totalBytes.hashCode() : 0);
+        return result;
     }
 }

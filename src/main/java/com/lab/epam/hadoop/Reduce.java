@@ -27,6 +27,8 @@ public class Reduce extends Reducer<Text, Text, Text, Model> {
             }
         }
         averageSum /= count;
-        context.write(key, new Model(sum,averageSum));
+        DoubleWritable sumDoubleWritable = new DoubleWritable(sum);
+        DoubleWritable averageSumDoubleWritable = new DoubleWritable(averageSum);
+        context.write(key, new Model(averageSumDoubleWritable,sumDoubleWritable));
     }
 }

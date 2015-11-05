@@ -11,16 +11,20 @@ import java.io.IOException;
 /**
  * Created by Bohdan-Dmytro_Vovchu on 11/4/2015.
  */
-public class Reduce extends Reducer<Text, DoubleWritable, Text, Model> {
+public class Reduce extends Reducer<Text, Text, Text, Model> {
     @Override
-    protected void reduce(Text key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException {
+    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
         double sum = 0;
         double averageSum = 0;
         int count = 0;
-        for (DoubleWritable i: values) {
-            sum += i.get();
-            averageSum += i.get();
-            count++;
+        for (Text i: values) {
+            try {
+                sum += Double.parseDouble(String.valueOf(i));
+                averageSum += Double.parseDouble(String.valueOf(i));
+                count++;
+            } catch (NumberFormatException e){
+
+            }
         }
         averageSum /= count;
         context.write(key, new Model(sum,averageSum));

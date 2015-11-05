@@ -15,10 +15,9 @@ public class Model implements Writable {
 
     @Override
     public String toString() {
-        return "Model{" +
+        return "    " +
                 "averageBytesPerRequest=" + averageBytesPerRequest +
-                ", totalBytes=" + totalBytes +
-                '}';
+                ", totalBytes=" + totalBytes;
     }
 
     public Double getTotalBytes() {

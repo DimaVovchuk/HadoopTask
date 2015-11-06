@@ -1,7 +1,6 @@
-package com.lab.epam.hadoop;
+package com.lab.epam.hadoop.task2;
 
 import com.lab.epam.entity.Model;
-import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 

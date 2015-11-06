@@ -22,12 +22,12 @@ import java.util.List;
 public class Tests {
 
     private final static String value = "ip1 - - [24/Apr/2011:04:06:01 -0400] GET /~strabal/grease/photo9/927-3.jpg HTTP/1.1 200 111 - Mozilla/5.0 (compatible; YandexImages/3.0; +http://yandex.com/bots)";
-    private final static String contex = "111";
+    private final static long contex = 111;
     private final static String key = "ip1";
 
-    MapDriver<LongWritable, Text, Text, Text> mapDriver;
-    ReduceDriver<Text, Text, Text, Model> reduceDriver;
-    MapReduceDriver<LongWritable, Text, Text, Text, Text, Model> mapReduceDriver;
+    MapDriver<LongWritable, Text, Text, Model> mapDriver;
+    ReduceDriver<Text, Model, Text, Text> reduceDriver;
+    MapReduceDriver<LongWritable, Text, Text, Model, Text, Text> mapReduceDriver;
 
     @Before
     public void setup() {
@@ -41,30 +41,26 @@ public class Tests {
     @Test
     public void testMapper() throws IOException {
         mapDriver.withInput(new LongWritable(), new Text(value));
-        mapDriver.withOutput(new Text(key), new Text(contex));
+        mapDriver.withOutput(new Text(key), new Model(contex, 1));
         mapDriver.runTest();
     }
 
     @Test
     public void testReducer() throws IOException {
-        List<Text> values = new ArrayList<>();
-        values.add(new Text(contex));
-        values.add(new Text(contex));
-        DoubleWritable averageBytesPerRequest = new DoubleWritable(111);
-        DoubleWritable sum = new DoubleWritable(222);
+        List<Model> values = new ArrayList<>();
+        values.add(new Model(contex, 1));
+        values.add(new Model(contex, 1));
         reduceDriver.withInput(new Text(key), values);
-        reduceDriver.withOutput(new Text(key), new Model(averageBytesPerRequest, sum));
+        reduceDriver.withOutput(new Text(key), new Text("111, 222"));
         reduceDriver.runTest();
     }
 
     @Test
     public void testMapReduce() throws IOException {
-        DoubleWritable averageBytesPerRequest = new DoubleWritable(111);
-        DoubleWritable sum = new DoubleWritable(333);
 
         mapReduceDriver.withInput(new LongWritable(), new Text(value)).withInput(new LongWritable(),
                 new Text(value)).withInput(new LongWritable(), new Text(value)).withReducer(
-                new Reduce()).withOutput(new Text(key), new Model(averageBytesPerRequest, sum));
+                new Reduce()).withOutput(new Text(key), new Text("111, 333"));
 
         mapReduceDriver.runTest();
     }

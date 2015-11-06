@@ -7,15 +7,13 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 
-
 /**
- * Created by Bohdan-Dmytro_Vovchu on 11/4/2015.
+ * Created by Bohdan-Dmytro_Vovchu on 11/5/2015.
  */
-public class Reduce extends Reducer<Text, Model, Text, Text> {
-    @Override
+public class Combiner extends Reducer<Text, Text, Text, Model> {
+
     public void reduce(Text key, Iterable<Model> values, Context context) throws IOException, InterruptedException {
         long sum = 0;
-        long averageSum = 0;
         int count = 0;
         for (Model model : values) {
             try {
@@ -24,9 +22,7 @@ public class Reduce extends Reducer<Text, Model, Text, Text> {
             } catch (NumberFormatException e) {
             }
         }
-        if(count != 0){
-            averageSum = sum / count;
-        }
-        context.write(key, new Text(String.valueOf(averageSum)+"," + String.valueOf(sum)));
+        context.write(key, new Model(sum, count));
     }
+
 }

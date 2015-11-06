@@ -1,8 +1,11 @@
 package com.lab.epam.runner;
 
 
+import com.lab.epam.entity.Model;
+import com.lab.epam.hadoop.Combiner;
 import com.lab.epam.hadoop.Map;
 import com.lab.epam.hadoop.Reduce;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -27,10 +30,11 @@ public class Driver extends Configured implements Tool {
         job.setJobName("IP traffic counter");
 
         job.setMapperClass(Map.class);
+        job.setCombinerClass(Combiner.class);
         job.setReducerClass(Reduce.class);
 
         job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(Text.class);
+        job.setMapOutputValueClass(Model.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);

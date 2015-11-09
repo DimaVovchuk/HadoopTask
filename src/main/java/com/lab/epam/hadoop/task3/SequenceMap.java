@@ -1,6 +1,5 @@
 package com.lab.epam.hadoop.task3;
 
-import com.lab.epam.entity.Model;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -21,8 +20,9 @@ public class SequenceMap extends Mapper<LongWritable, Text, Text, Text> {
         try {
             ip.set(splitedLine[0]);
             browser.set(splitedLine[11]);
+            long totalBytes = Long.parseLong(splitedLine[9]);
             context.write(ip, browser);
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
 
         }
     }

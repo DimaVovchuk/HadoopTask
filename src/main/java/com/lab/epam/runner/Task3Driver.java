@@ -45,9 +45,7 @@ public class Task3Driver extends Configured implements Tool {
         TextInputFormat.addInputPath(job, in);
         FileOutputFormat.setOutputPath(job, out);
 
-        boolean success = job.waitForCompletion(true);
-
-        return success ? 0 : 1;
+        return job.waitForCompletion(true) ? 0 : 1;
 
     }
 

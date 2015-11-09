@@ -44,11 +44,8 @@ public class Driver extends Configured implements Tool {
         FileOutputFormat.setOutputPath(job, out);
 
 
-        boolean success = job.waitForCompletion(true);
-//        long typeBRecords = job.getCounters().findCounter("RecordType", "TypeB").getValue();
 
-
-        return success ? 0 : 1;
+        return job.waitForCompletion(true) ? 0 : 1;
 
     }
 

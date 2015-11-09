@@ -51,10 +51,7 @@ public class SequenceDriver extends Configured implements Tool {
 
         FileOutputFormat.setOutputPath(job, out);
 
-
-        boolean success = job.waitForCompletion(true);
-
-        return success ? 0 : 1;
+        return job.waitForCompletion(true) ? 0 : 1;
 
     }
 
